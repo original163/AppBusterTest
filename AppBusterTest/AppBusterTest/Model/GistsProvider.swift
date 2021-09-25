@@ -14,13 +14,17 @@ struct Gist: Decodable {
     let dateUpdated: String
     let gistTitle: String
     
+    
     enum CodingKeys: String, CodingKey {
         case htmlURL = "html_url"
         case dateCreated = "created_at"
         case dateUpdated = "updated_at"
         case gistTitle = "description"
+        
       
     }
+    
+    
 }
 
 protocol GistsProviderDelegate: AnyObject {

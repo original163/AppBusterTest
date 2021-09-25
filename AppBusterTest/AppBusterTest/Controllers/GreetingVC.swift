@@ -11,7 +11,7 @@ import SnapKit
 
 final class GreetingVC: UIViewController {
     
-    var nickname: String = K.text.emptyString
+    var nickname: String = String()
     
     
     
@@ -90,8 +90,6 @@ final class GreetingVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        
         view.addSubview(backgroundImage)
         view.addSubview(submitButton)
         view.addSubview(noInputLabel)
@@ -156,7 +154,7 @@ final class GreetingVC: UIViewController {
 }
 
 
-private extension UIView {
+extension UIView {
     
     func fadeInAndOut(
             duration: TimeInterval = 0.2,
