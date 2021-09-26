@@ -17,6 +17,20 @@ private extension CGFloat {
     static let rowsCountforCollectionViewLayoutBounds: CGFloat = 3.0
 }
 
+//private extension String {
+//    var converted = {
+//        let ISOFormatter = ISO8601DateFormatter()
+//        let date = ISOFormatter.date(from: self)!
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateFormat = "MMM d, HH:mm"
+//        let stringDate = dateFormatter.string(from: date)
+//        print(stringDate)
+//
+//
+//
+//    }()
+//}
+
 
 
 final class PreviewVC: UIViewController {
@@ -64,6 +78,10 @@ final class PreviewVC: UIViewController {
         //6 так как мы создали layout мы можем создать объект CollectionView с инциализатором collectionViewLayout
         // frame: .zero потому что дает явно понять что FRAME будет задаваться в будущем при расстовлении layout
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
+        
+        collectionView.allowsSelection = true
+        collectionView.isUserInteractionEnabled = true
+        
         collectionView.backgroundColor = UIColor(white: 0, alpha: 0)
         collectionView.layer.cornerRadius = 25
         collectionView.showsVerticalScrollIndicator = false
@@ -84,6 +102,7 @@ final class PreviewVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         
         gistProvider.delegate = self
         gistProvider.getNextGists()
@@ -175,7 +194,7 @@ extension PreviewVC: GistsProviderDelegate {
         
     
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReachFinalPage finished: Bool) {
-        print("reach last page")
+    
     }
 }
 
@@ -198,17 +217,26 @@ extension PreviewVC: UICollectionViewDataSource {
             fatalError("Error: Can not dequeue GistCollectionViewCell")
         }
         
-        // после создания класса ячейки имеем досту к её property
+        let cellHtmlUrl = mainGistsArray[indexPath.row].htmlUrl
+        let dateCreated = mainGistsArray[indexPath.row].dateCreated
+        //setting cell
+        cell.createDate = covertDate(ISO8601string: dateCreated) //might be extension of String?
         
         if mainGistsArray[indexPath.row].gistTitle == "" {
             cell.title = "no discription"
         } else {
             cell.title = mainGistsArray[indexPath.row].gistTitle
         }
-        cell.createDate = mainGistsArray[indexPath.row].dateCreated
-        cell.updateDate = mainGistsArray[indexPath.row].dateUpdated
         
         return cell
+    }
+    
+    func covertDate(ISO8601string: String) -> String {
+        let ISOFormatter = ISO8601DateFormatter()
+        let date = ISOFormatter.date(from: ISO8601string)!
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, HH:mm"
+        return dateFormatter.string(from: date)
     }
     
     public func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
@@ -216,9 +244,13 @@ extension PreviewVC: UICollectionViewDataSource {
         if indexPath.row == mainGistsArray.count - 1 {
             gistProvider.getNextGists()
         }
-        
-        
     }
+    
+    public func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("УРААА")
+        print(indexPath.row)
+    }
+    
 }
 
 

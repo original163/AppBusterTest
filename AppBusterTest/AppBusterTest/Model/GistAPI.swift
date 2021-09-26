@@ -10,7 +10,7 @@
 
 import Foundation
 
-//helper
+
 private extension URL {
     init?(host: URL, endpointComponents: EndpointComponents) {
         var components = URLComponents()
@@ -60,7 +60,7 @@ struct UserGistsEndpoint: EndpointComponents {
         ]
     }
     
-    init(username: String, gistsPerPage: Int = 6, pageNumber: Int = 2) {
+    init(username: String, gistsPerPage: Int = 6, pageNumber: Int = 0) {
         self.username = username
         self.gistsPerPage = gistsPerPage
         self.pageNumber = pageNumber

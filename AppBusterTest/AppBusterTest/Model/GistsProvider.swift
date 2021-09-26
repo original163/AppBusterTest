@@ -8,23 +8,17 @@
 import Foundation
 
 struct Gist: Decodable {
-    
-    let htmlURL: String
+    let htmlUrl: String
     let dateCreated: String
     let dateUpdated: String
     let gistTitle: String
     
-    
     enum CodingKeys: String, CodingKey {
-        case htmlURL = "html_url"
+        case htmlUrl = "html_url"
         case dateCreated = "created_at"
         case dateUpdated = "updated_at"
         case gistTitle = "description"
-        
-      
-    }
-    
-    
+     }
 }
 
 protocol GistsProviderDelegate: AnyObject {
@@ -36,7 +30,7 @@ protocol GistsProviderDelegate: AnyObject {
 class GistsProvider {
     private let api = GistAPI()
     private let username: String
-    private var pageNumber: Int = 1
+    private var pageNumber: Int = Int()
     private var isFinished = false
     
     weak var delegate: GistsProviderDelegate?

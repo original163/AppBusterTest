@@ -21,6 +21,8 @@ class GistCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        isUserInteractionEnabled = true
+        
         
         contentView.backgroundColor = UIColor(white: 1, alpha: 0.4)
         contentView.layer.cornerRadius = 25
@@ -37,6 +39,7 @@ class GistCollectionViewCell: UICollectionViewCell {
         
         //добавляем на вьюху ячейки, обратить внимание что это ContentView
         contentView.addSubview(stackView)
+        
         
         //и растягиваем stackView на всю ячейку
         stackView.snp.makeConstraints {
