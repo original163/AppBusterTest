@@ -11,12 +11,12 @@ import SnapKit
 
 final class GreetingVC: UIViewController {
     
-    var nickname: String = String()
+   
     
     
     
     private let backgroundImage: UIImageView = {
-        let image = UIImageView(image: UIImage(named: K.imageNames.greetingVCbackground ))
+        let image = UIImageView(image: UIImage(named: Constants.imageNames.greetingVCbackground ))
         return image
     }()
     
@@ -26,16 +26,16 @@ final class GreetingVC: UIViewController {
     }()
     
     private let logoImage:UIImageView = {
-        let image = UIImageView(image: UIImage(named: K.imageNames.greetingVClogo))
+        let image = UIImageView(image: UIImage(named: Constants.imageNames.greetingVClogo))
         return image
     }()
     
     private let infoLabel: UILabel = {
         let label = UILabel()
-        label.text = K.text.infoLabelText
+        label.text = Constants.text.infoLabelText
         label.backgroundColor = .init(white: 0, alpha: 0)
         label.textAlignment = .center
-        label.font = UIFont(name: K.fontNames.chalkboardSE, size: 50)
+        label.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 50)
         return label
     }()
     
@@ -50,8 +50,8 @@ final class GreetingVC: UIViewController {
     
     private let userNameTextField: UITextField = {
         let textField = UITextField()
-        textField.font = UIFont(name: K.fontNames.chalkboardSE, size: 27.0)
-        textField.placeholder = K.text.placholderText
+        textField.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 27.0)
+        textField.placeholder = Constants.text.placholderText
         textField.textColor = .black
         return textField
     }()
@@ -60,14 +60,14 @@ final class GreetingVC: UIViewController {
         let label = UILabel()
         label.backgroundColor = .init(white: 0, alpha: 0)
         label.textAlignment = .center
-        label.font = UIFont(name: K.fontNames.chalkboardSE, size: 25)
+        label.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 25)
         return label
     }()
     
     private let submitButton: UIButton = {
         let button = UIButton(type: .system) as UIButton
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        button.setTitle(K.text.buttonText, for: .normal)
+        button.setTitle(Constants.text.buttonText, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         button.backgroundColor = .darkText
         button.layer.cornerRadius = 15
@@ -78,13 +78,18 @@ final class GreetingVC: UIViewController {
     
     
    @objc func buttonPressed(sender: UIButton!) {
-        if userNameTextField.text == K.text.emptyString {
-            noInputLabel.text = K.text.noInputLabelTextArray.randomElement()
+        if userNameTextField.text == Constants.text.emptyString {
+            noInputLabel.text = Constants.text.noInputLabelTextArray.randomElement()
             noInputLabel.fadeInAndOut()
         } else {
-            nickname = userNameTextField.text!
+            guard let username = userNameTextField.text else { return }
+            let previewVC = PreviewVC(username: username)
+            previewVC.modalPresentationStyle = .fullScreen
+            present(previewVC, animated: true)
        }
     }
+    
+    
     
     
     override func viewDidLoad() {

@@ -5,7 +5,7 @@
 //  Created by Денис Денисов on 08.09.2021.
 //
 
-struct K {
+struct Constants {
     
     struct imageNames {
         

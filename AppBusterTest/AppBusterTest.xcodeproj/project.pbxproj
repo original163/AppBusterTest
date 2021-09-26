@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CD09C84A2701060900EFC1EF /* LoadingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD09C8492701060900EFC1EF /* LoadingCollectionViewCell.swift */; };
 		CD36B75626E7E33E003A2272 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD36B75526E7E33E003A2272 /* AppDelegate.swift */; };
 		CD36B75F26E7E340003A2272 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CD36B75E26E7E340003A2272 /* Assets.xcassets */; };
 		CD36B76226E7E340003A2272 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CD36B76026E7E340003A2272 /* LaunchScreen.storyboard */; };
@@ -21,6 +22,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		CD09C8492701060900EFC1EF /* LoadingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCollectionViewCell.swift; sourceTree = "<group>"; };
 		CD36B75226E7E33E003A2272 /* AppBusterTest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AppBusterTest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CD36B75526E7E33E003A2272 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CD36B75E26E7E340003A2272 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 			isa = PBXGroup;
 			children = (
 				CD7FBBB426ECBA0A00C375BB /* GistCollectionViewCell.swift */,
+				CD09C8492701060900EFC1EF /* LoadingCollectionViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -187,6 +190,7 @@
 				CD36B75626E7E33E003A2272 /* AppDelegate.swift in Sources */,
 				CD40F5C126FE1B4D00521C4C /* DetailVC.swift in Sources */,
 				CD7FBBAF26EB72FB00C375BB /* PreviewVC.swift in Sources */,
+				CD09C84A2701060900EFC1EF /* LoadingCollectionViewCell.swift in Sources */,
 				CDDBFE6726E8A42000CC9DA8 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

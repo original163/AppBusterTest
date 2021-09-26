@@ -10,7 +10,6 @@
 
 import Foundation
 
-
 private extension URL {
     init?(host: URL, endpointComponents: EndpointComponents) {
         var components = URLComponents()
@@ -23,10 +22,21 @@ private extension URL {
     }
 }
 
+private struct IncorrectInputResponse: Decodable {
+    let message: String
+    let documentationURL: String
+    
+    enum CodingKeys: String, CodingKey {
+        case message
+        case documentationURL = "documentation_url"
+    }
+}
+
 enum APIError: Error {
     case incorrectDataType // если указан не правильный тип модели
     case systemError // если нет интернета
     case serverError
+    case incorrectInput
 }
 
 protocol EndpointComponents {
@@ -95,23 +105,28 @@ struct GistAPI {
                 return
             }
             
-            guard
-                let httpResponse = response as? HTTPURLResponse, // логическое &&
-                (200...299).contains(httpResponse.statusCode)
-                    
-            else {
+            guard let httpResponse = response as? HTTPURLResponse else {
+                fatalError("Something is wrong with Foundation API")
+            }
+            
+            if httpResponse.statusCode == 404 {
+                completionHandler(.failure(.incorrectInput))
+                return
+            } else if !(200...299).contains(httpResponse.statusCode) {
                 completionHandler(.failure(.serverError))
                 return
             }
-            print("response statusCode: \(httpResponse.statusCode)")
             
-            guard let data = data,
-                  let models = try? JSONDecoder().decode(Model.self, from: data)
-            else {
+            if let data = data,
+               let models = try? JSONDecoder().decode(Model.self, from: data) {
+                completionHandler(.success(models))
+            } else if let data = data,
+                      let _ = try? JSONDecoder().decode(IncorrectInputResponse.self, from: data) {
+                completionHandler(.failure(.incorrectInput))
+            } else {
                 completionHandler(.failure(.incorrectDataType))
-                return
             }
-            completionHandler(.success(models))
+            
         }
         .resume()
     }
