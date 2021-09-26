@@ -32,16 +32,30 @@ class GistCollectionViewCell: UICollectionViewCell {
             let stack = UIStackView()
             stack.axis = .vertical
             stack.alignment = .center
-            stack.distribution = .fillEqually
-            [nameLabel,createDateLabel,updateDateLabel].forEach(stack.addArrangedSubview)
+//            stack.distribution = .fillEqually
+            [nameLabel,updateDateLabel, createDateLabel].forEach(stack.addArrangedSubview)
             return stack
         }()
         
         //добавляем на вьюху ячейки, обратить внимание что это ContentView
         contentView.addSubview(stackView)
         
-        
-        //и растягиваем stackView на всю ячейку
+        nameLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.equalToSuperview().inset(10)
+            $0.height.equalToSuperview().multipliedBy(0.2)
+        }
+        updateDateLabel.snp.makeConstraints {
+            $0.top.equalTo(nameLabel.snp.bottom)
+            $0.left.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        createDateLabel.snp.makeConstraints {
+            $0.right.equalToSuperview()
+            $0.width.equalToSuperview().multipliedBy(0.5)
+            $0.height.equalToSuperview().multipliedBy(0.2)
+            $0.bottom.equalToSuperview()
+        }
         stackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             }

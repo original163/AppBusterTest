@@ -220,8 +220,8 @@ extension PreviewVC: UICollectionViewDataSource {
         let cellHtmlUrl = mainGistsArray[indexPath.row].htmlUrl
         let dateCreated = mainGistsArray[indexPath.row].dateCreated
         //setting cell
-        cell.createDate = covertDate(ISO8601string: dateCreated) //might be extension of String?
-        
+        cell.createDate = "created at: " + covertDate(ISO8601string: dateCreated) //might be extension of String?
+        cell.updateDate = "WebView"
         if mainGistsArray[indexPath.row].gistTitle == "" {
             cell.title = "no discription"
         } else {
