@@ -74,7 +74,6 @@
 				CDDBFE6126E7F29100CC9DA8 /* Controllers */,
 				CD36B75E26E7E340003A2272 /* Assets.xcassets */,
 				CD36B76026E7E340003A2272 /* LaunchScreen.storyboard */,
-				CDDBFE6626E8A42000CC9DA8 /* Constants.swift */,
 				CD36B76326E7E340003A2272 /* Info.plist */,
 			);
 			path = AppBusterTest;
@@ -102,6 +101,7 @@
 		CDDBFE9A26E9F08700CC9DA8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				CDDBFE6626E8A42000CC9DA8 /* Constants.swift */,
 				CDD9853226F346B500CB85E3 /* GistAPI.swift */,
 				CD86728026FC4BB3006A21F1 /* GistsProvider.swift */,
 			);

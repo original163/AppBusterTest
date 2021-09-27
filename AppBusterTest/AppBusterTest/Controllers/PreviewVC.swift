@@ -7,13 +7,10 @@
 import UIKit
 import SnapKit
 
-// for layout property
+
 private extension CGFloat {
-    static let spacing: CGFloat = 7.0 // for CollectionView Layout
-    static let inset: CGFloat = 2.0   // for CollectionView Layout
-    
-    // for SizeForItem method in UICollectionViewDelegateFlowLayout
-    //здесь задается количество ячеек в CollectionView
+    static let spacing: CGFloat = 7.0
+    static let inset: CGFloat = 2.0
     static let rowsCountforCollectionViewLayoutBounds: CGFloat = 6.0
 }
 
@@ -36,9 +33,8 @@ final class PreviewVC: UIViewController {
     }
     
     private let userAvatar: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "1.jpg"))
+        let imageView = UIImageView(image: UIImage(named: Constants.imageNames.greetingVClogo))
         imageView.contentMode = .scaleAspectFit
-        imageView.clipsToBounds = true
         return imageView
     }()
     
@@ -54,23 +50,20 @@ final class PreviewVC: UIViewController {
         return stack
         
     }()
-    
+    private let backButton: UIButton = {
+        let button = UIButton(type: .system) as UIButton
+        button.tintColor = .black
+        button.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
+        button.setImage(UIImage(systemName: Constants.imageNames.back), for: .normal)
+        button.imageView!.contentMode = .scaleAspectFit
+        return button
+    }()
     private let gistCollectionView: UICollectionView = {
-        //2 CollectionView инициализируется с помощью объекта UICollectionViewFlowLayout
-        //3 поэтому создаём объект этого класса
-        //  он отвечает за расположение ячеек внутри CollectionView, что мы и определяем в его свойствах
         let layout = UICollectionViewFlowLayout()
-        //4 прописываем то как у нас будут располагаться ячейки в CollectionView
-        layout.scrollDirection = .vertical // направление скрола
-        layout.minimumLineSpacing = .spacing // растояние между ячейками
-        
-        //5 расстояние между ячейками и краями CollectionView
+        layout.scrollDirection = .vertical
+        layout.minimumLineSpacing = .spacing
         layout.sectionInset = UIEdgeInsets(top: .inset, left: .inset, bottom: .inset, right: .inset)
-        //6 так как мы создали layout мы можем создать объект CollectionView с инциализатором collectionViewLayout
-        // frame: .zero потому что дает явно понять что FRAME будет задаваться в будущем при расстовлении layout
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        
-        
         collectionView.backgroundColor = .white.withAlphaComponent(0.0)
         collectionView.layer.cornerRadius = 25
         collectionView.showsVerticalScrollIndicator = false
@@ -79,20 +72,16 @@ final class PreviewVC: UIViewController {
     
     private let errorLabel: UILabel = {
         let label = UILabel()
-        label.backgroundColor = .red
-//        label.backgroundColor = .init(white: 0, alpha: 0)
+        label.backgroundColor = .white.withAlphaComponent(0.0)
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 15)
-        
+        label.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 30)
         return label
     }()
-    
     init(username: String) {
         self.username = username
         gistProvider = GistsProvider(username: username)
         super.init(nibName: nil, bundle: nil)
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
@@ -100,38 +89,39 @@ final class PreviewVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
         gistProvider.delegate = self
         gistProvider.getNextGists()
         
-        
-        //10 обязательно ПЕРВЫМ ДЕЛОМ регистрируем ячейку КОСТОМНЫЙ КЛАСС ЯЧЕЙКИ
         gistCollectionView.register(GistCollectionViewCell.self, forCellWithReuseIdentifier: GistCollectionViewCell.reuseId)
         gistCollectionView.register(LoadingCollectionViewCell.self, forCellWithReuseIdentifier: LoadingCollectionViewCell.reuseId)
-        //11 задаём PreviewVC поставщиком данных для gistCollectionView
         gistCollectionView.dataSource = self
-        //12 задаём PreviewVC выполняющим метод (sizeForItemAt)
         gistCollectionView.delegate = self
         
-        //14 располагаем коллекцию на экране
         view.addSubview(backgroundImage)
         view.addSubview(gistCollectionView)
         view.addSubview(infoView)
+        view.addSubview(backButton)
         view.addSubview(errorLabel)
-        
+
         errorLabel.isHidden = true
         
+        userAvatar.snp.makeConstraints {
+            $0.width.equalToSuperview().multipliedBy(0.33)
+        }
         
-        //15 делаем layout
         infoView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(40)
             $0.height.equalToSuperview().multipliedBy(0.3)
             $0.width.equalToSuperview()
             $0.centerX.equalToSuperview()
         }
+        backButton.snp.makeConstraints {
+            $0.leading.equalTo(gistCollectionView.snp.leading)
+            $0.top.equalTo(infoView.snp.top)
+        }
         gistCollectionView.snp.makeConstraints {
             $0.top.equalTo(infoView.snp.bottom)
-            $0.width.equalToSuperview()
+            $0.width.equalToSuperview().inset(10)
             $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
             $0.centerX.equalToSuperview()
         }
@@ -139,43 +129,30 @@ final class PreviewVC: UIViewController {
             $0.edges.equalToSuperview()
         }
         errorLabel.snp.makeConstraints {
-            $0.width.equalToSuperview()
             $0.center.equalToSuperview()
-            
+            $0.centerY.equalToSuperview()
         }
     }
 }
-
-// 7 высчитываем размер для ячейки с помощью метода делегата именно layout'a
-// эти методы вызовутся когда collectionView установиться со своим layout и начнет прогружать layot для ячеек
 extension PreviewVC: UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        //ожидает получить CGSize объект
-        //поэтому мы его создаём и высчитываем размер ячейки который будет зависесть от размера
-        //collectionView, которая в свою очередь будет зависеть от размера Veiw (всего экрана)
-        
-        CGSize(
-            //ширина ячейки. Округляем до целого вниз.
-            width: floor(collectionView.frame.width - (2 * .inset)),
-            
-            //высота ячейки. Округляем до целого вниз.
-            height: floor((collectionView.bounds.height - (.rowsCountforCollectionViewLayoutBounds - 1) * .spacing - 2 * .inset) / .rowsCountforCollectionViewLayoutBounds)
-        )
-        
-    }
-
+    func collectionView(
+        _ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+            CGSize(
+                width: floor(collectionView.frame.width - (2 * .inset)),
+                height: floor((collectionView.bounds.height - (.rowsCountforCollectionViewLayoutBounds - 1) * .spacing - 2 * .inset) / .rowsCountforCollectionViewLayoutBounds)
+            )
+        }
+    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == gists.count - 1 {
             gistProvider.getNextGists()
         }
     }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard indexPath.row != gists.count else { return }
         guard let url = URL(string: gists[indexPath.row].htmlUrl) else {
             fatalError("Incorrect data from server")
         }
-        
         let detailVC = DetailVC(url: url)
         present(detailVC, animated: true)
     }
@@ -186,45 +163,40 @@ final class InformationButton: UIView {
     private let tapHandler: () -> ()
     private let infoText: String
     private let buttonText: String
-    
     private let button = UIButton()
     private let label = UILabel()
-    
     init(frame: CGRect = .zero, infoText: String, buttonText: String, tapHandler: @escaping () -> ()) {
         self.buttonText = buttonText
         self.tapHandler = tapHandler
         self.infoText = infoText
         super.init(frame: frame)
-        
         let stack: UIStackView = {
             let stack = UIStackView()
             stack.axis = .vertical
             stack.alignment = .center
+            stack.backgroundColor = .red
             [label, button].forEach(stack.addArrangedSubview)
             return stack
         }()
-        
         addSubview(stack)
+        button.snp.makeConstraints {
+            $0.height.equalToSuperview().multipliedBy(0.70)
+            $0.centerY.equalToSuperview()
+        }
         stack.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(10.0)
         }
-        
         button.addTarget(self, action: #selector(invokeTapHandler), for: .touchUpInside)
         button.setTitle(buttonText, for: .normal)
-        
         label.text = infoText
     }
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     @objc private func invokeTapHandler() {
         tapHandler()
     }
 }
-
-
 extension PreviewVC: GistsProviderDelegate {
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReceiveNextPage gists: [Gist]) {
         self.gists += gists
@@ -232,7 +204,6 @@ extension PreviewVC: GistsProviderDelegate {
             self.gistCollectionView.reloadData()
         }
     }
-    
     func gistProviderDelegate(_ gistProvider: GistsProvider, didFailWithError error: GistProviderError) {
         gistCollectionView.isHidden = true
         switch error {
@@ -242,29 +213,27 @@ extension PreviewVC: GistsProviderDelegate {
             }
             break
         case .systemError:
-            // button.isHidden = true
-            gistCollectionView.isHidden = false
-            gistProvider.getNextGists() // вызов в обжс селекторе кнопки
+            errorLabel.text = "Connection is lost..."
+            errorLabel.isHidden = false
+            infoView.isHidden = true
+            break
         case .serverError:
-            gistProvider.getNextGists() // вызов в обжс селекторе кнопки
+            errorLabel.text = "Server error"
+            infoView.isHidden = true
+            errorLabel.isHidden = false
         default:
             break
         }
-        errorLabel.fadeInAndOut(duration: 3, delayIn: 0.0, between: 0.5)
     }
-    
-    private func showInformationButton(infoText: String, buttonText: String, tapHandler: @escaping () -> ()){
-        let informationButton = InformationButton(infoText: "Username doesn't exist", buttonText: "Type another one", tapHandler: tapHandler)
+    private func showInformationButton(infoText: String,buttonText: String, tapHandler: @escaping () -> ()){
+        let informationButton = InformationButton(infoText: infoText, buttonText: buttonText, tapHandler: tapHandler)
         view.addSubview(informationButton)
         informationButton.snp.makeConstraints {
             $0.center.equalToSuperview()
+            $0.width.equalToSuperview().multipliedBy(0.6)
+            $0.height.equalToSuperview().multipliedBy(0.08)
         }
     }
-    
-    
-        
-    
-    
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReachFinalPage finished: Bool) {
         isFinished = true
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
@@ -273,14 +242,10 @@ extension PreviewVC: GistsProviderDelegate {
     }
 }
 
-// 9 для заполнения PreviewVC -> CollectionView нужно реализовать два метода которые находятся в протоколе
 extension PreviewVC: UICollectionViewDataSource {
-    // метод отвечающий за количество ячеек
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         !isFinished ? gists.count + 1 : gists.count
     }
-    
-    // метод возвращающий ячейку в конкретную позицию (IndexPath)
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if indexPath.row < gists.count {
             if imageState == .notLoaded,
@@ -293,7 +258,6 @@ extension PreviewVC: UICollectionViewDataSource {
             return makeLoadingCollectionViewCell(collectionView, at: indexPath)
         }
     }
-    
     private func makeGistCollectionViewCell(_ collectionView: UICollectionView, at indexPath: IndexPath) -> GistCollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: GistCollectionViewCell.reuseId, for: indexPath) as? GistCollectionViewCell else {
             fatalError("Error: Can not dequeue GistCollectionViewCell")
@@ -318,7 +282,6 @@ extension PreviewVC: UICollectionViewDataSource {
                 self?.imageState = .notLoaded
                 return
             }
-            
             guard
                 let httpResponse = response as? HTTPURLResponse,
                 (200...299).contains(httpResponse.statusCode)
@@ -326,7 +289,6 @@ extension PreviewVC: UICollectionViewDataSource {
                 self?.imageState = .notLoaded
                 return
             }
-            
             guard
                 let data = data,
                 let image = UIImage(data: data)
@@ -341,6 +303,12 @@ extension PreviewVC: UICollectionViewDataSource {
         }
         .resume()
     }
+    
+    @objc func backButtonPressed(sender: UIButton!) {
+        let greatingVC = GreetingVC()
+        greatingVC.modalPresentationStyle = .fullScreen
+        present(greatingVC, animated: true)
+     }
 }
 
 

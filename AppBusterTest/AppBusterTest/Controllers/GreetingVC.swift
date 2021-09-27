@@ -11,10 +11,6 @@ import SnapKit
 
 final class GreetingVC: UIViewController {
     
-   
-    
-    
-    
     private let backgroundImage: UIImageView = {
         let image = UIImageView(image: UIImage(named: Constants.imageNames.greetingVCbackground ))
         return image
@@ -88,10 +84,6 @@ final class GreetingVC: UIViewController {
             present(previewVC, animated: true)
        }
     }
-    
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -101,54 +93,42 @@ final class GreetingVC: UIViewController {
         view.addSubview(wrappViewForTextField)
         view.addSubview(wrappViewForLogo)
         
-        
         wrappViewForTextField.addSubview(userNameTextField)
         wrappViewForLogo.addSubview(logoImage)
         wrappViewForLogo.addSubview(infoLabel)
         
-        
         noInputLabel.isHidden = true
-        
         
         backgroundImage.snp.makeConstraints {
             $0.size.equalToSuperview()
         }
-
         wrappViewForLogo.snp.makeConstraints {
             $0.width.equalToSuperview()
             $0.centerX.equalToSuperview()
             $0.top.equalToSuperview()
             $0.bottom.equalTo(wrappViewForTextField.snp.top)
         }
-
         logoImage.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalToSuperview().multipliedBy(0.8)
         }
-
         infoLabel.snp.makeConstraints {
             $0.bottom.equalToSuperview().inset(40)
             $0.centerX.equalToSuperview()
-
         }
-
         wrappViewForTextField.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.width.equalToSuperview().multipliedBy(0.8)
         }
-
         userNameTextField.snp.makeConstraints {
             $0.size.equalToSuperview().inset(10)
             $0.center.equalToSuperview()
-
         }
-
         noInputLabel.snp.makeConstraints {
             $0.top.equalTo(userNameTextField.snp.bottom)
             $0.bottom.equalTo(submitButton.snp.top)
             $0.centerX.equalToSuperview()
         }
-
         submitButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview().multipliedBy(0.6)
@@ -166,7 +146,6 @@ extension UIView {
             delayIn: TimeInterval = 0.0,
             between: TimeInterval = 1.0
         ) {
-            // delayIn (alpha = 0) -> duration (alpha = 1) -> between (alpha = 1) -> duration (alpha = 0)
             fadeIn(duration: duration, delay: delayIn) { _ in
                 self.fadeOut(duration: duration, delay: between)
             }
@@ -210,7 +189,4 @@ extension UIView {
                     }
             )
         }
-
-
-
 }

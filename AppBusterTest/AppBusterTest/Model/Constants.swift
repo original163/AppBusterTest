@@ -9,6 +9,7 @@ struct Constants {
     
     struct imageNames {
         
+        static let back = "arrow.backward.circle"
         static let greetingVCbackground = "greatingVCbackground"
         static let previewVCbackground = "previewVCbackground"
         static let greetingVClogo = "greetingVClogo"

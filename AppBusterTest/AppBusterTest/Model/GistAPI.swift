@@ -33,36 +33,26 @@ private struct IncorrectInputResponse: Decodable {
 }
 
 enum APIError: Error {
-    case incorrectDataType // если указан не правильный тип модели
-    case systemError // если нет интернета
+    case incorrectDataType
+    case systemError
     case serverError
     case incorrectInput
 }
 
 protocol EndpointComponents {
-    // объект подписаный этим протоколом сможет только получить значения этих properties
     var path: [String] { get }
     var queryItems: [URLQueryItem]? { get }
 }
 
 struct UserGistsEndpoint: EndpointComponents {
-    // endpoint parameter
-    // stored-property (лоцирована, память выделена)
     let username: String
-    
-    // Согласно документации API
-    
-    // read-only computed-property (передача издержек по памяти - вызывающей стороне)
     var path: [String] {
         ["users", username, "gists"]
     }
-    // possible query items
-    let gistsPerPage: Int // default parameter in init()
-    let pageNumber: Int   // default parameter in init()
+   
+    let gistsPerPage: Int
+    let pageNumber: Int
     
-    // Согласно документации API
-    
-    // read-only computed-property (передача издержек по памяти - вызывающей стороне)
     var queryItems: [URLQueryItem]? {
         [
             URLQueryItem(name: "per_page", value: String(gistsPerPage)),
@@ -81,7 +71,7 @@ struct GistAPI {
     private let host = URL(string: "api.github.com")!
     
     enum Endpoints {
-        case userGistsEndpoint(associatedValue: UserGistsEndpoint) //one of variants of use GithubAPI
+        case userGistsEndpoint(associatedValue: UserGistsEndpoint)
         
         var endpointComponents: EndpointComponents {
             switch self {
@@ -96,19 +86,16 @@ struct GistAPI {
         completion completionHandler: @escaping (Result<Model, APIError>) -> Void
     ) {
         guard let url = URL(host: host, endpointComponents: endpoint.endpointComponents) else {
-            fatalError("Error: your endpoints are not valid") //не compltionHandler так как мы уверенны что URL собрался
+            fatalError("Error: your endpoints are not valid")
         }
-        
         URLSession.shared.dataTask(with: url) { data, response, error in
-            if error != nil { // тут возможна только системная ошибка (нет интернета)
+            if error != nil {
                 completionHandler(.failure(.systemError))
                 return
             }
-            
             guard let httpResponse = response as? HTTPURLResponse else {
                 fatalError("Something is wrong with Foundation API")
             }
-            
             if httpResponse.statusCode == 404 {
                 completionHandler(.failure(.incorrectInput))
                 return
@@ -116,7 +103,6 @@ struct GistAPI {
                 completionHandler(.failure(.serverError))
                 return
             }
-            
             if let data = data,
                let models = try? JSONDecoder().decode(Model.self, from: data) {
                 completionHandler(.success(models))
