@@ -31,7 +31,6 @@ final class PreviewVC: UIViewController {
         case loading
         case loaded
     }
-    
     private let userAvatar: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: Constants.imageNames.greetingVClogo))
         imageView.contentMode = .scaleAspectFit
@@ -92,6 +91,7 @@ final class PreviewVC: UIViewController {
         gistProvider.delegate = self
         gistProvider.getNextGists()
         
+        
         gistCollectionView.register(GistCollectionViewCell.self, forCellWithReuseIdentifier: GistCollectionViewCell.reuseId)
         gistCollectionView.register(LoadingCollectionViewCell.self, forCellWithReuseIdentifier: LoadingCollectionViewCell.reuseId)
         gistCollectionView.dataSource = self
@@ -146,6 +146,8 @@ extension PreviewVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == gists.count - 1 {
             gistProvider.getNextGists()
+            
+            
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -200,6 +202,9 @@ final class InformationButton: UIView {
 extension PreviewVC: GistsProviderDelegate {
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReceiveNextPage gists: [Gist]) {
         self.gists += gists
+        if gists.isEmpty == false {
+            errorLabel.isHidden = true
+        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.gistCollectionView.reloadData()
         }
@@ -247,6 +252,7 @@ extension PreviewVC: UICollectionViewDataSource {
         !isFinished ? gists.count + 1 : gists.count
     }
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
         if gists.isEmpty {
             errorLabel.text = "User doesn't have gists"
             errorLabel.isHidden = false
@@ -310,6 +316,7 @@ extension PreviewVC: UICollectionViewDataSource {
     }
     
     @objc func backButtonPressed(sender: UIButton!) {
+        
         let greatingVC = GreetingVC()
         greatingVC.modalPresentationStyle = .fullScreen
         present(greatingVC, animated: true)
