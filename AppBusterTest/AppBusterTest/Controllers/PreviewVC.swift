@@ -247,6 +247,11 @@ extension PreviewVC: UICollectionViewDataSource {
         !isFinished ? gists.count + 1 : gists.count
     }
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        if gists.isEmpty {
+            errorLabel.text = "User doesn't have gists"
+            errorLabel.isHidden = false
+        }
+       
         if indexPath.row < gists.count {
             if imageState == .notLoaded,
                imageState != .loading,
