@@ -61,6 +61,7 @@ protocol GistsProviderDelegate: AnyObject {
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReceiveNextPage gists: [Gist])
     func gistProviderDelegate(_ gistProvider: GistsProvider, didFailWithError error: GistProviderError)
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReachFinalPage finished: Bool)
+    func gistProviderDelegate(_ gistProvider: GistsProvider, didReachedFinalPage finished: Bool)
 }
 
 class GistsProvider {
@@ -101,6 +102,10 @@ class GistsProvider {
                     self.delegate?.gistProviderDelegate(self, didFailWithError: error)
                     self.state = .idle
                 case .success(let gists):
+                    if gists.count < 6 {
+                        self.delegate?.gistProviderDelegate(self, didReachedFinalPage: true)
+                        self.state = .finished
+                    }
                     if gists.isEmpty {
                         self.delegate?.gistProviderDelegate(self, didReachFinalPage: true)
                         self.state = .finished

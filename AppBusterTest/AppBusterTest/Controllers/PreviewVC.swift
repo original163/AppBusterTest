@@ -14,7 +14,6 @@ private extension CGFloat {
     static let rowsCountforCollectionViewLayoutBounds: CGFloat = 6.0
 }
 
-
 final class PreviewVC: UIViewController {
     private let gistProvider: GistsProvider
     private let username: String
@@ -25,7 +24,6 @@ final class PreviewVC: UIViewController {
         let image = UIImageView(image: UIImage(named: Constants.imageNames.previewVCbackground ))
         return image
     }()
-    
     private enum ImageState {
         case notLoaded
         case loading
@@ -36,7 +34,6 @@ final class PreviewVC: UIViewController {
         imageView.contentMode = .scaleAspectFit
         return imageView
     }()
-    
     private lazy var infoView: UIStackView = {
         let stack = UIStackView()
         var userNickname = UILabel()
@@ -47,7 +44,6 @@ final class PreviewVC: UIViewController {
         stack.distribution = .fillEqually
         [userAvatar,userNickname,].forEach(stack.addArrangedSubview)
         return stack
-        
     }()
     private let backButton: UIButton = {
         let button = UIButton(type: .system) as UIButton
@@ -68,7 +64,6 @@ final class PreviewVC: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
-    
     private let errorLabel: UILabel = {
         let label = UILabel()
         label.backgroundColor = .white.withAlphaComponent(0.0)
@@ -84,13 +79,12 @@ final class PreviewVC: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        errorLabel.isHidden = true
         gistProvider.delegate = self
         gistProvider.getNextGists()
-        
         
         gistCollectionView.register(GistCollectionViewCell.self, forCellWithReuseIdentifier: GistCollectionViewCell.reuseId)
         gistCollectionView.register(LoadingCollectionViewCell.self, forCellWithReuseIdentifier: LoadingCollectionViewCell.reuseId)
@@ -102,13 +96,10 @@ final class PreviewVC: UIViewController {
         view.addSubview(infoView)
         view.addSubview(backButton)
         view.addSubview(errorLabel)
-
-        errorLabel.isHidden = true
         
         userAvatar.snp.makeConstraints {
             $0.width.equalToSuperview().multipliedBy(0.33)
         }
-        
         infoView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(40)
             $0.height.equalToSuperview().multipliedBy(0.3)
@@ -142,12 +133,9 @@ extension PreviewVC: UICollectionViewDelegateFlowLayout {
                 height: floor((collectionView.bounds.height - (.rowsCountforCollectionViewLayoutBounds - 1) * .spacing - 2 * .inset) / .rowsCountforCollectionViewLayoutBounds)
             )
         }
-    
     func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
-        if indexPath.row == gists.count - 1 {
+        if indexPath.row == gists.count - 1 && gists.count != 1 {
             gistProvider.getNextGists()
-            
-            
         }
     }
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -159,8 +147,6 @@ extension PreviewVC: UICollectionViewDelegateFlowLayout {
         present(detailVC, animated: true)
     }
 }
-
-
 final class InformationButton: UIView {
     private let tapHandler: () -> ()
     private let infoText: String
@@ -183,7 +169,6 @@ final class InformationButton: UIView {
         addSubview(stack)
         button.snp.makeConstraints {
             $0.height.equalToSuperview().multipliedBy(0.70)
-            $0.centerY.equalToSuperview()
         }
         stack.snp.makeConstraints {
             $0.edges.equalToSuperview().inset(10.0)
@@ -202,9 +187,6 @@ final class InformationButton: UIView {
 extension PreviewVC: GistsProviderDelegate {
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReceiveNextPage gists: [Gist]) {
         self.gists += gists
-        if gists.isEmpty == false {
-            errorLabel.isHidden = true
-        }
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
             self.gistCollectionView.reloadData()
         }
@@ -241,9 +223,16 @@ extension PreviewVC: GistsProviderDelegate {
     }
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReachFinalPage finished: Bool) {
         isFinished = true
+        errorLabel.text = "User doesn't have gists"
+        errorLabel.isHidden = !gists.isEmpty
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            self.gistCollectionView.deleteItems(at: [IndexPath(row: self.gists.count, section: 0)])
+            if self.gists.isEmpty == false {
+                self.gistCollectionView.deleteItems(at: [IndexPath(row: self.gists.count, section: 0)])
+            }
         }
+    }
+    func gistProviderDelegate(_ gistProvider: GistsProvider, didReachedFinalPage finished: Bool) {
+        isFinished = true
     }
 }
 
@@ -251,13 +240,8 @@ extension PreviewVC: UICollectionViewDataSource {
     public func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         !isFinished ? gists.count + 1 : gists.count
     }
+    
     public func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        if gists.isEmpty {
-            errorLabel.text = "User doesn't have gists"
-            errorLabel.isHidden = false
-        }
-       
         if indexPath.row < gists.count {
             if imageState == .notLoaded,
                imageState != .loading,
