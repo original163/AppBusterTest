@@ -65,16 +65,16 @@ protocol GistsProviderDelegate: AnyObject {
 }
 
 class GistsProvider {
-    private let api = GistAPI()
-    private let username: String
-    private var pageNumber: Int = Int()
-    private var state: State = .idle
-    
     private enum State {
         case idle
         case loading
         case finished
     }
+    
+    private let api = GistAPI()
+    private let username: String
+    private var pageNumber: Int = Int()
+    private var state: State = .idle
     
     weak var delegate: GistsProviderDelegate?
     

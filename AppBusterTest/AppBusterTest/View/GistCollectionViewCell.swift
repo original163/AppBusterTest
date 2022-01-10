@@ -17,7 +17,7 @@ class GistCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         label.setContentHuggingPriority(.defaultLow, for: .vertical)
         label.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
-        label.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 20)
+        label.font = UIFont(name: Constants.fontNames.chalkboardSE.rawValue, size: 20)
         return label
     }()
     

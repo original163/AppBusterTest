@@ -10,29 +10,33 @@ import SnapKit
 
 
 final class GreetingVC: UIViewController {
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        print("GreetingVC - created")
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     private let backgroundImage: UIImageView = {
-        let image = UIImageView(image: UIImage(named: Constants.imageNames.greetingVCbackground ))
+        let image = UIImageView(image: UIImage(named: Constants.imageNames.greetingVCbackground.rawValue))
         return image
     }()
-    
-    private let wrappViewForLogo: UIView = {
-        let view = UIView()
-        return view
-    }()
-    
-    private let logoImage:UIImageView = {
-        let image = UIImageView(image: UIImage(named: Constants.imageNames.greetingVClogo))
-        return image
-    }()
-    
-    private let infoLabel: UILabel = {
+    private let stackLogoWithLabel: UIStackView = {
+        let logo = UIImageView(image: UIImage(named: Constants.imageNames.greetingVClogo.rawValue))
+        logo.contentMode = .scaleAspectFit
         let label = UILabel()
-        label.text = Constants.text.infoLabelText
+        label.text = Constants.text.infoLabelText.rawValue
         label.backgroundColor = .init(white: 0, alpha: 0)
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 50)
-        return label
+        label.font = UIFont(name: Constants.fontNames.chalkboardSE.rawValue, size: 50)
+        
+        let stack = UIStackView(arrangedSubviews: [logo, label])
+        stack.alignment = .center
+        stack.axis = .vertical
+        stack.distribution = .fillProportionally
+        stack.autoresizesSubviews = true
+        return stack
     }()
     
     private let wrappViewForTextField: UIView = {
@@ -43,27 +47,20 @@ final class GreetingVC: UIViewController {
         view.layer.cornerRadius = 15
         return view
     }()
-    
-    private let userNameTextField: UITextField = {
+    let userNameTextField: UITextField = {
         let textField = UITextField()
-        textField.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 27.0)
-        textField.placeholder = Constants.text.placholderText
+        textField.autocapitalizationType = .none
+        textField.font = UIFont(name: Constants.fontNames.chalkboardSE.rawValue, size: 27.0)
+        textField.placeholder = Constants.text.placholderText.rawValue
         textField.textColor = .black
+        textField.autocorrectionType = .no
+        textField.returnKeyType = .search
         return textField
     }()
-    
-    private let noInputLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .init(white: 0, alpha: 0)
-        label.textAlignment = .center
-        label.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 25)
-        return label
-    }()
-    
     private let submitButton: UIButton = {
         let button = UIButton(type: .system) as UIButton
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        button.setTitle(Constants.text.buttonText, for: .normal)
+        button.setTitle(Constants.text.buttonText.rawValue, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         button.backgroundColor = .darkText
         button.layer.cornerRadius = 15
@@ -73,120 +70,63 @@ final class GreetingVC: UIViewController {
     }()
     
     
-   @objc func buttonPressed(sender: UIButton!) {
-        if userNameTextField.text == Constants.text.emptyString {
-            noInputLabel.text = Constants.text.noInputLabelTextArray.randomElement()
-            noInputLabel.fadeInAndOut()
-        } else {
-            guard let username = userNameTextField.text else { return }
-            let previewVC = PreviewVC(username: username)
-            previewVC.modalPresentationStyle = .fullScreen
-            present(previewVC, animated: true)
-       }
-    }
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        userNameTextField.delegate = self
+        setupLayout()
+    }
+    @objc func buttonPressed(sender: UIButton!) {
+        
+        userNameTextField.endEditing(true)
+        if userNameTextField.text == "" {
+            let alert = UIAlertController(title: "No input", message: "Please enter nickaname", preferredStyle: .alert)
+            let action = UIAlertAction(title: "ok", style: .cancel)
+            alert.addAction(action)
+            present(alert, animated: true, completion: nil)
+        } else {
+            guard let username = userNameTextField.text else { return }
+            let previewVC = PreviewVC(username: username)
+            navigationController?.pushViewController(previewVC, animated: true)
+        }
+    }
+    
+    func setupLayout() {
         view.addSubview(backgroundImage)
-        view.addSubview(submitButton)
-        view.addSubview(noInputLabel)
+        view.addSubview(stackLogoWithLabel)
         view.addSubview(wrappViewForTextField)
-        view.addSubview(wrappViewForLogo)
-        
+        view.addSubview(submitButton)
         wrappViewForTextField.addSubview(userNameTextField)
-        wrappViewForLogo.addSubview(logoImage)
-        wrappViewForLogo.addSubview(infoLabel)
-        
-        noInputLabel.isHidden = true
         
         backgroundImage.snp.makeConstraints {
+            $0.center.equalToSuperview()
             $0.size.equalToSuperview()
         }
-        wrappViewForLogo.snp.makeConstraints {
-            $0.width.equalToSuperview()
+        stackLogoWithLabel.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.centerX.equalToSuperview()
-            $0.top.equalToSuperview()
-            $0.bottom.equalTo(wrappViewForTextField.snp.top)
-        }
-        logoImage.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.size.equalToSuperview().multipliedBy(0.8)
-        }
-        infoLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(40)
-            $0.centerX.equalToSuperview()
+            $0.height.equalToSuperview().multipliedBy(0.4)
         }
         wrappViewForTextField.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.top.equalTo(stackLogoWithLabel.snp.bottom).offset(40)
+            $0.centerX.equalToSuperview()
             $0.width.equalToSuperview().multipliedBy(0.8)
+            $0.height.equalToSuperview().multipliedBy(0.08)
         }
         userNameTextField.snp.makeConstraints {
             $0.size.equalToSuperview().inset(10)
             $0.center.equalToSuperview()
         }
-        noInputLabel.snp.makeConstraints {
-            $0.top.equalTo(userNameTextField.snp.bottom)
-            $0.bottom.equalTo(submitButton.snp.top)
-            $0.centerX.equalToSuperview()
-        }
         submitButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.width.equalToSuperview().multipliedBy(0.6)
             $0.height.equalToSuperview().multipliedBy(0.08)
-            $0.top.equalTo(userNameTextField.snp.bottom).offset(100)
+            $0.bottom.equalToSuperview().inset(40)
         }
-   }
+    }
+    deinit {
+        print("GreatingVC deleted")
+    }
 }
 
 
-extension UIView {
-    
-    func fadeInAndOut(
-            duration: TimeInterval = 0.2,
-            delayIn: TimeInterval = 0.0,
-            between: TimeInterval = 1.0
-        ) {
-            fadeIn(duration: duration, delay: delayIn) { _ in
-                self.fadeOut(duration: duration, delay: between)
-            }
-        }
-    func fadeIn(
-            duration: TimeInterval = 0.2,
-            delay: TimeInterval = 0.0,
-            _ completion: @escaping ((Bool) -> Void)
-        ) {
-            guard isHidden else { return }
-            alpha = 0.0
-            isHidden = false
-            UIView.animate(
-                withDuration: duration,
-                delay: delay,
-                animations:
-                    {
-                        self.alpha = 1.0
-                    },
-                completion: completion
-            )
-        }
-    
-    func fadeOut(
-            duration: TimeInterval = 0.2,
-            delay: TimeInterval = 0.0,
-            _ completion: ((Bool) -> Void)? = nil
-        ) {
-            guard !isHidden else { return }
-            UIView.animate(
-                withDuration: duration,
-                delay: delay,
-                animations:
-                    {
-                        self.alpha = 0.0
-                    },
-                completion:
-                    { isAnimated in
-                        self.isHidden = true
-                        completion?(isAnimated)
-                    }
-            )
-        }
-}

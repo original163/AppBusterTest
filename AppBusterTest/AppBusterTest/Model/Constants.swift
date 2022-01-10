@@ -5,35 +5,27 @@
 //  Created by Денис Денисов on 08.09.2021.
 //
 
-struct Constants {
+enum Constants {
     
-    struct imageNames {
+    enum imageNames: String {
         
-        static let back = "arrow.backward.circle"
-        static let greetingVCbackground = "greatingVCbackground"
-        static let previewVCbackground = "previewVCbackground"
-        static let greetingVClogo = "greetingVClogo"
+        case back = "arrow.backward.circle"
+        case greetingVCbackground = "greatingVCbackground"
+        case previewVCbackground = "previewVCbackground"
+        case greetingVClogo = "greetingVClogo"
     }
     
-    struct fontNames {
-        static let chalkboardSE = "Chalkboard SE"
+    enum fontNames: String {
+        case chalkboardSE = "Chalkboard SE"
     }
     
-    struct text {
+    enum text: String {
         
-        static let infoLabelText = "Gist browser"
-        static let emptyString = ""
-        static let placholderText = "Username"
-        static let placholderNoInputText = "Write something..."
-        static let buttonText = "Show gists"
-        static let noInputLabelTextArray = [
-            "🤔 and what you are waiting for?",
-            "Seriously?",
-            "Nickname...please😐",
-            "Are you forgetting something?",
-            "🥱..."
-        ]
+        case infoLabelText = "Gist browser"
+        case emptyString = ""
+        case placholderText = "Username"
+        case placholderNoInputText = "Write something..."
+        case buttonText = "Show gists"
+        case noInputLabelTextArray = "Are you forgetting something?"
     }
-    
-    
 }

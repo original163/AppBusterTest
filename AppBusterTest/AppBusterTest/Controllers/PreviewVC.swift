@@ -16,12 +16,19 @@ private extension CGFloat {
 
 final class PreviewVC: UIViewController {
     private let gistProvider: GistsProvider
-    private let username: String
+    var username: String {
+        willSet {
+            print("user name WillSet")
+        }
+        didSet {
+            print("user name DidSet")
+        }
+    }
     private var isFinished: Bool = false
     private var imageState: ImageState = .notLoaded
     private var gists: [Gist] = [Gist]()
     private let backgroundImage: UIImageView = {
-        let image = UIImageView(image: UIImage(named: Constants.imageNames.previewVCbackground ))
+        let image = UIImageView(image: UIImage(named: Constants.imageNames.previewVCbackground.rawValue ))
         return image
     }()
     private enum ImageState {
@@ -30,29 +37,34 @@ final class PreviewVC: UIViewController {
         case loaded
     }
     private let userAvatar: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: Constants.imageNames.greetingVClogo))
-        imageView.contentMode = .scaleAspectFit
+        let image = UIImage(named: Constants.imageNames.greetingVClogo.rawValue)
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFill
+        //        imageView.layer.masksToBounds = false
+        //        imageView.layer.cornerRadius = 10
+        //        imageView.clipsToBounds = true
         return imageView
     }()
     private lazy var infoView: UIStackView = {
         let stack = UIStackView()
         var userNickname = UILabel()
         userNickname.text = username
-        userNickname.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 30)
+        userNickname.font = UIFont(name: Constants.fontNames.chalkboardSE.rawValue, size: 30)
         stack.axis = .vertical
         stack.alignment = .center
         stack.distribution = .fillEqually
         [userAvatar,userNickname,].forEach(stack.addArrangedSubview)
         return stack
     }()
-    private let backButton: UIButton = {
-        let button = UIButton(type: .system) as UIButton
-        button.tintColor = .black
-        button.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
-        button.setImage(UIImage(systemName: Constants.imageNames.back), for: .normal)
-        button.imageView!.contentMode = .scaleAspectFit
-        return button
-    }()
+    //    private let backButton: UIButton = {
+    //        let button = UIButton(type: .system) as UIButton
+    //        button.tintColor = .black
+    ////        button.addTarget(self, action: #selector(backButtonPressed), for: .touchUpInside)
+    //        button.setImage(UIImage(systemName: Constants.imageNames.back.rawValue), for: .normal)
+    //        button.imageView!.contentMode = .scaleAspectFit
+    //        return button
+    //
+    //    }()
     private let gistCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -64,25 +76,27 @@ final class PreviewVC: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
-    private let errorLabel: UILabel = {
-        let label = UILabel()
-        label.backgroundColor = .white.withAlphaComponent(0.0)
-        label.textAlignment = .center
-        label.font = UIFont(name: Constants.fontNames.chalkboardSE, size: 30)
-        return label
-    }()
+    
     init(username: String) {
         self.username = username
         gistProvider = GistsProvider(username: username)
+        print("PreviewVC - created")
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    override func loadView() {
+        print("loadView")
+        super.loadView()
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
+        print(gistCollectionView.frame)
+        print(gistCollectionView.bounds)
         
-        errorLabel.isHidden = true
+        
         gistProvider.delegate = self
         gistProvider.getNextGists()
         
@@ -94,21 +108,23 @@ final class PreviewVC: UIViewController {
         view.addSubview(backgroundImage)
         view.addSubview(gistCollectionView)
         view.addSubview(infoView)
-        view.addSubview(backButton)
-        view.addSubview(errorLabel)
-        
+    }
+    deinit {
+        print("PreviewVC deleted")
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        print("viewWillAppear")
+        print(gistCollectionView.frame)
+        print(gistCollectionView.bounds)
         userAvatar.snp.makeConstraints {
             $0.width.equalToSuperview().multipliedBy(0.33)
+            print("makedConstraints")
         }
         infoView.snp.makeConstraints {
             $0.top.equalToSuperview().inset(40)
             $0.height.equalToSuperview().multipliedBy(0.3)
             $0.width.equalToSuperview()
             $0.centerX.equalToSuperview()
-        }
-        backButton.snp.makeConstraints {
-            $0.leading.equalTo(gistCollectionView.snp.leading)
-            $0.top.equalTo(infoView.snp.top)
         }
         gistCollectionView.snp.makeConstraints {
             $0.top.equalTo(infoView.snp.bottom)
@@ -119,13 +135,34 @@ final class PreviewVC: UIViewController {
         backgroundImage.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        errorLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
-            $0.centerY.equalToSuperview()
-        }
+    }
+    override func viewWillLayoutSubviews() {
+        print("viewWillLayoutSubviews")
+        print(gistCollectionView.frame)
+        print(gistCollectionView.bounds)
+    }
+    override func viewDidLayoutSubviews() {
+        print("viewDidLayoutSubviews")
+        print(gistCollectionView.frame)
+        print(gistCollectionView.bounds)
+    }
+    override func viewDidAppear(_ animated: Bool) {
+        print("viewDidAppear")
+        print(gistCollectionView.frame)
+        print(gistCollectionView.bounds)
+    }
+    override func viewWillDisappear(_ animated: Bool) {
+        print("viewWillDisappear")
+    }
+    override func viewDidDisappear(_ animated: Bool) {
+        print("viewDidDisappear")
+    }
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        print("viewWillTransition")
     }
 }
 extension PreviewVC: UICollectionViewDelegateFlowLayout {
+    
     func collectionView(
         _ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
             CGSize(
@@ -147,6 +184,9 @@ extension PreviewVC: UICollectionViewDelegateFlowLayout {
         present(detailVC, animated: true)
     }
 }
+
+
+
 final class InformationButton: UIView {
     private let tapHandler: () -> ()
     private let infoText: String
@@ -200,14 +240,14 @@ extension PreviewVC: GistsProviderDelegate {
             }
             break
         case .systemError:
-            errorLabel.text = "Connection is lost..."
-            errorLabel.isHidden = false
-            infoView.isHidden = true
+            //            errorLabel.text = "Connection is lost..."
+            //            errorLabel.isHidden = false
+            //            infoView.isHidden = true
             break
         case .serverError:
-            errorLabel.text = "Server error"
+            //            errorLabel.text = "Server error"
             infoView.isHidden = true
-            errorLabel.isHidden = false
+            //            errorLabel.isHidden = false
         default:
             break
         }
@@ -223,8 +263,8 @@ extension PreviewVC: GistsProviderDelegate {
     }
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReachFinalPage finished: Bool) {
         isFinished = true
-        errorLabel.text = "User doesn't have gists"
-        errorLabel.isHidden = !gists.isEmpty
+        //        errorLabel.text = "User doesn't have gists"
+        //        errorLabel.isHidden = !gists.isEmpty
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             if self.gists.isEmpty == false {
                 self.gistCollectionView.deleteItems(at: [IndexPath(row: self.gists.count, section: 0)])
@@ -270,7 +310,7 @@ extension PreviewVC: UICollectionViewDataSource {
         return cell
     }
     
-    private func setImage(withURL url: URL) {
+    private func setImage(withURL url: URL) { // must be on отдельный класс API
         imageState = .loading
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             if error != nil {
@@ -298,13 +338,6 @@ extension PreviewVC: UICollectionViewDataSource {
         }
         .resume()
     }
-    
-    @objc func backButtonPressed(sender: UIButton!) {
-        
-        let greatingVC = GreetingVC()
-        greatingVC.modalPresentationStyle = .fullScreen
-        present(greatingVC, animated: true)
-     }
 }
 
 

@@ -15,6 +15,7 @@ class DetailVC: UIViewController, WKUIDelegate {
     
     init(url: URL) {
         self.url = url
+        print("DetailVC created")
         super.init(nibName: nil, bundle: nil)
         let request = URLRequest(url: url)
         webView.load(request)
@@ -32,4 +33,7 @@ class DetailVC: UIViewController, WKUIDelegate {
             $0.edges.equalToSuperview()
         }
     }
+    deinit {
+       print("DetailVC deleted")
+     }
 }
