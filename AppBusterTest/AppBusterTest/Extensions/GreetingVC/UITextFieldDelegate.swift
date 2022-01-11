@@ -5,7 +5,7 @@
 //  Created by Денис Денисов on 10.01.2022.
 //
 
-import Foundation
+
 import UIKit
 extension GreetingVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

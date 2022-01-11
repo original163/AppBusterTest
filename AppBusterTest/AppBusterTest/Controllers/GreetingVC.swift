@@ -74,7 +74,7 @@ final class GreetingVC: UIViewController {
         super.viewDidLoad()
         
         userNameTextField.delegate = self
-        setupLayout()
+        setupUI()
     }
     @objc func buttonPressed(sender: UIButton!) {
         
@@ -91,7 +91,7 @@ final class GreetingVC: UIViewController {
         }
     }
     
-    func setupLayout() {
+    func setupUI() {
         view.addSubview(backgroundImage)
         view.addSubview(stackLogoWithLabel)
         view.addSubview(wrappViewForTextField)
