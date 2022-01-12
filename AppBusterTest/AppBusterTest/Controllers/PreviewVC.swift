@@ -57,7 +57,7 @@ final class PreviewVC: UIViewController {
     init(username: String) {
         self.username = username
         gistProvider = GistsProvider(username: username)
-        print("PreviewVC - created")
+        print("PreviewVC - created") // for test
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
