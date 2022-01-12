@@ -15,7 +15,6 @@
 		CD7FBBAF26EB72FB00C375BB /* PreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FBBAE26EB72FB00C375BB /* PreviewVC.swift */; };
 		CD7FBBB526ECBA0A00C375BB /* GistCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD7FBBB426ECBA0A00C375BB /* GistCollectionViewCell.swift */; };
 		CD86728126FC4BB3006A21F1 /* GistsProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD86728026FC4BB3006A21F1 /* GistsProvider.swift */; };
-		CD8910CE276722F0002CD0B1 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD8910CD276722EF002CD0B1 /* AlertPresenter.swift */; };
 		CDC60D5A276876BE0020801A /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = CDC60D59276876BE0020801A /* IQKeyboardManagerSwift */; };
 		CDD7041F278C03F400388B7A /* UITextFieldDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD7041E278C03F400388B7A /* UITextFieldDelegate.swift */; };
 		CDD70423278D52B700388B7A /* UICollectionViewDelegateFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDD70422278D52B700388B7A /* UICollectionViewDelegateFlowLayout.swift */; };
@@ -26,6 +25,10 @@
 		CDDBFE6026E7F26800CC9DA8 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = CDDBFE5F26E7F26800CC9DA8 /* SnapKit */; };
 		CDDBFE6326E7F2D200CC9DA8 /* GreetingVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDBFE6226E7F2D200CC9DA8 /* GreetingVC.swift */; };
 		CDDBFE6726E8A42000CC9DA8 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDDBFE6626E8A42000CC9DA8 /* Constants.swift */; };
+		CDFD39F9278EBB7E00DDE795 /* ImageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFD39F8278EBB7E00DDE795 /* ImageManager.swift */; };
+		CDFD39FB278ED69F00DDE795 /* Gist.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFD39FA278ED69F00DDE795 /* Gist.swift */; };
+		CDFD39FD278ED6E700DDE795 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFD39FC278ED6E700DDE795 /* String.swift */; };
+		CDFD39FF278ED79400DDE795 /* GistOwner.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDFD39FE278ED79400DDE795 /* GistOwner.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -39,7 +42,6 @@
 		CD7FBBAE26EB72FB00C375BB /* PreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreviewVC.swift; sourceTree = "<group>"; };
 		CD7FBBB426ECBA0A00C375BB /* GistCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistCollectionViewCell.swift; sourceTree = "<group>"; };
 		CD86728026FC4BB3006A21F1 /* GistsProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistsProvider.swift; sourceTree = "<group>"; };
-		CD8910CD276722EF002CD0B1 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		CDD7041E278C03F400388B7A /* UITextFieldDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UITextFieldDelegate.swift; sourceTree = "<group>"; };
 		CDD70422278D52B700388B7A /* UICollectionViewDelegateFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UICollectionViewDelegateFlowLayout.swift; sourceTree = "<group>"; };
 		CDD70425278D54E600388B7A /* CGFloat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGFloat.swift; sourceTree = "<group>"; };
@@ -48,6 +50,10 @@
 		CDD9853226F346B500CB85E3 /* GistAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistAPI.swift; sourceTree = "<group>"; };
 		CDDBFE6226E7F2D200CC9DA8 /* GreetingVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreetingVC.swift; sourceTree = "<group>"; };
 		CDDBFE6626E8A42000CC9DA8 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		CDFD39F8278EBB7E00DDE795 /* ImageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageManager.swift; sourceTree = "<group>"; };
+		CDFD39FA278ED69F00DDE795 /* Gist.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Gist.swift; sourceTree = "<group>"; };
+		CDFD39FC278ED6E700DDE795 /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		CDFD39FE278ED79400DDE795 /* GistOwner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GistOwner.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,8 +91,9 @@
 				CDDBFE9A26E9F08700CC9DA8 /* Model */,
 				CDDBFE7526E9E6B400CC9DA8 /* View */,
 				CDDBFE6126E7F29100CC9DA8 /* Controllers */,
+				CDFD3A00278ED85D00DDE795 /* Network */,
 				CDD70420278D51B700388B7A /* Extensions */,
-				CD8910CF276722F7002CD0B1 /* Helpers */,
+				CD8910CF276722F7002CD0B1 /* SupportingFiles */,
 				CD36B75E26E7E340003A2272 /* Assets.xcassets */,
 				CD36B76026E7E340003A2272 /* LaunchScreen.storyboard */,
 				CD36B76326E7E340003A2272 /* Info.plist */,
@@ -94,13 +101,13 @@
 			path = AppBusterTest;
 			sourceTree = "<group>";
 		};
-		CD8910CF276722F7002CD0B1 /* Helpers */ = {
+		CD8910CF276722F7002CD0B1 /* SupportingFiles */ = {
 			isa = PBXGroup;
 			children = (
+				CDDBFE6626E8A42000CC9DA8 /* Constants.swift */,
 				CD36B75526E7E33E003A2272 /* AppDelegate.swift */,
-				CD8910CD276722EF002CD0B1 /* AlertPresenter.swift */,
 			);
-			path = Helpers;
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 		CDD70420278D51B700388B7A /* Extensions */ = {
@@ -135,6 +142,7 @@
 			isa = PBXGroup;
 			children = (
 				CDD70425278D54E600388B7A /* CGFloat.swift */,
+				CDFD39FC278ED6E700DDE795 /* String.swift */,
 			);
 			path = "Type extensions";
 			sourceTree = "<group>";
@@ -144,6 +152,7 @@
 			children = (
 				CDDBFE6226E7F2D200CC9DA8 /* GreetingVC.swift */,
 				CD7FBBAE26EB72FB00C375BB /* PreviewVC.swift */,
+				CDFD39F8278EBB7E00DDE795 /* ImageManager.swift */,
 				CD40F5C026FE1B4D00521C4C /* DetailVC.swift */,
 			);
 			path = Controllers;
@@ -161,11 +170,19 @@
 		CDDBFE9A26E9F08700CC9DA8 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				CDDBFE6626E8A42000CC9DA8 /* Constants.swift */,
+				CDFD39FE278ED79400DDE795 /* GistOwner.swift */,
+				CDFD39FA278ED69F00DDE795 /* Gist.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CDFD3A00278ED85D00DDE795 /* Network */ = {
+			isa = PBXGroup;
+			children = (
 				CDD9853226F346B500CB85E3 /* GistAPI.swift */,
 				CD86728026FC4BB3006A21F1 /* GistsProvider.swift */,
 			);
-			path = Model;
+			path = Network;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -248,7 +265,7 @@
 				CD7FBBB526ECBA0A00C375BB /* GistCollectionViewCell.swift in Sources */,
 				CDD9853326F346B500CB85E3 /* GistAPI.swift in Sources */,
 				CDD70429278D575A00388B7A /* GistsProviderDelegate.swift in Sources */,
-				CD8910CE276722F0002CD0B1 /* AlertPresenter.swift in Sources */,
+				CDFD39FB278ED69F00DDE795 /* Gist.swift in Sources */,
 				CDDBFE6326E7F2D200CC9DA8 /* GreetingVC.swift in Sources */,
 				CD86728126FC4BB3006A21F1 /* GistsProvider.swift in Sources */,
 				CD36B75626E7E33E003A2272 /* AppDelegate.swift in Sources */,
@@ -256,9 +273,12 @@
 				CDD70426278D54E600388B7A /* CGFloat.swift in Sources */,
 				CD7FBBAF26EB72FB00C375BB /* PreviewVC.swift in Sources */,
 				CD09C84A2701060900EFC1EF /* LoadingCollectionViewCell.swift in Sources */,
+				CDFD39FD278ED6E700DDE795 /* String.swift in Sources */,
+				CDFD39F9278EBB7E00DDE795 /* ImageManager.swift in Sources */,
 				CDD7041F278C03F400388B7A /* UITextFieldDelegate.swift in Sources */,
 				CDDBFE6726E8A42000CC9DA8 /* Constants.swift in Sources */,
 				CDD70423278D52B700388B7A /* UICollectionViewDelegateFlowLayout.swift in Sources */,
+				CDFD39FF278ED79400DDE795 /* GistOwner.swift in Sources */,
 				CDD7042B278D5A5800388B7A /* UICollectionViewDataSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

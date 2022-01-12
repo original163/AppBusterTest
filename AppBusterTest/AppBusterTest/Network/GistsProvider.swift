@@ -7,54 +7,6 @@
 
 import Foundation
 
-private extension String {
-    func formatted() -> String {
-        let ISOFormatter = ISO8601DateFormatter()
-        guard let date = ISOFormatter.date(from: self) else {
-            fatalError("Something is wrong with API")
-        }
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM d, HH:mm"
-        return dateFormatter.string(from: date)
-    }
-}
-
-struct Gist: Decodable {
-    let htmlUrl: String
-    let dateCreated: String
-    let title: String
-    let owner: Owner
-    
-    enum CodingKeys: String, CodingKey {
-        case htmlUrl = "html_url"
-        case dateCreated = "created_at"
-        case title = "description"
-        case owner
-     }
-    
-    init(
-        htmlUrl: String,
-        dateCreated: String,
-        title: String,
-        owner: Owner
-    ) {
-        self.htmlUrl = htmlUrl
-        self.dateCreated = dateCreated
-        self.title = title
-        self.owner = owner
-    }
-}
-
-struct Owner: Codable {
-    let login: String
-    let avatarURL: String
-
-    enum CodingKeys: String, CodingKey {
-        case login
-        case avatarURL = "avatar_url"
-     }
-}
-
 typealias GistProviderError = APIError
 
 protocol GistsProviderDelegate: AnyObject {

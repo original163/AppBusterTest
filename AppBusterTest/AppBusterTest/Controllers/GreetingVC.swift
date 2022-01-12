@@ -12,7 +12,7 @@ import SnapKit
 final class GreetingVC: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
-        print("GreetingVC - created")
+        print("GreetingVC - created") // for testing
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

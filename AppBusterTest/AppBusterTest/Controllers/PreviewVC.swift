@@ -13,15 +13,17 @@ final class PreviewVC: UIViewController {
     var isFinished: Bool = false
     var imageState: ImageState = .notLoaded
     var gists: [Gist] = [Gist]()
-    private let backgroundImage: UIImageView = {
-        let image = UIImageView(image: UIImage(named: Constants.imageNames.previewVCbackground.rawValue ))
-        return image
-    }()
+    
     enum ImageState {
         case notLoaded
         case loading
         case loaded
     }
+    
+    private let backgroundImage: UIImageView = {
+        let image = UIImageView(image: UIImage(named: Constants.imageNames.previewVCbackground.rawValue ))
+        return image
+    }()
     private let userAvatar: UIImageView = {
         let loader = UIActivityIndicatorView(style: .medium)
         let image = UIImage(named: Constants.imageNames.greetingVClogo.rawValue)
@@ -98,6 +100,8 @@ final class PreviewVC: UIViewController {
             $0.edges.equalToSuperview()
         }
     }
+    
+    
     func setImage(withURL url: URL) { // must be on отдельный класс API
         imageState = .loading
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
