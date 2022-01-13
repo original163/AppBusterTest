@@ -25,7 +25,7 @@ private extension URL {
 private struct IncorrectInputResponse: Decodable {
     let message: String
     let documentationURL: String
-    
+
     enum CodingKeys: String, CodingKey {
         case message
         case documentationURL = "documentation_url"
@@ -49,17 +49,17 @@ struct UserGistsEndpoint: EndpointComponents {
     var path: [String] {
         ["users", username, "gists"]
     }
-   
+
     let gistsPerPage: Int
     let pageNumber: Int
-    
+
     var queryItems: [URLQueryItem]? {
         [
             URLQueryItem(name: "per_page", value: String(gistsPerPage)),
             URLQueryItem(name: "page", value: String(pageNumber))
         ]
     }
-    
+
     init(username: String, gistsPerPage: Int = 6, pageNumber: Int = 0) {
         self.username = username
         self.gistsPerPage = gistsPerPage
@@ -69,10 +69,10 @@ struct UserGistsEndpoint: EndpointComponents {
 
 struct GistAPI {
     private let host = URL(string: "api.github.com")!
-    
+
     enum Endpoints {
         case userGistsEndpoint(associatedValue: UserGistsEndpoint)
-        
+
         var endpointComponents: EndpointComponents {
             switch self {
             case .userGistsEndpoint(let endpointComponents):
@@ -80,7 +80,7 @@ struct GistAPI {
             }
         }
     }
-    
+
     func request<Model: Decodable>(
         endpoint: Endpoints,
         completion completionHandler: @escaping (Result<Model, APIError>) -> Void
@@ -106,17 +106,12 @@ struct GistAPI {
             if let data = data,
                let models = try? JSONDecoder().decode(Model.self, from: data) {
                 completionHandler(.success(models))
-            } else if let data = data,
-                      let _ = try? JSONDecoder().decode(IncorrectInputResponse.self, from: data) {
-                completionHandler(.failure(.incorrectInput))
             } else {
                 completionHandler(.failure(.incorrectDataType))
             }
-            
+
         }
         .resume()
     }
-    
+
 }
-
-
