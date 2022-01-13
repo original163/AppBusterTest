@@ -12,14 +12,14 @@ struct Gist: Decodable {
     let dateCreated: String
     let title: String
     let owner: GistOwner
-    
+
     enum CodingKeys: String, CodingKey {
         case htmlUrl = "html_url"
         case dateCreated = "created_at"
         case title = "description"
         case owner
      }
-    
+
     init(
         htmlUrl: String,
         dateCreated: String,
@@ -32,4 +32,3 @@ struct Gist: Decodable {
         self.owner = owner
     }
 }
-

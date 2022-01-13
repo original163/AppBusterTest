@@ -5,11 +5,10 @@
 //  Created by Денис Денисов on 10.01.2022.
 //
 
-
 import UIKit
 extension GreetingVC: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        
+
         if userNameTextField.text == "" {
             let alert = UIAlertController(title: "No input", message: "Please enter nickaname", preferredStyle: .alert)
             let action = UIAlertAction(title: "ok", style: .cancel)

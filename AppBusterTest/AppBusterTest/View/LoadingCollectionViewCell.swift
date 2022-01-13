@@ -10,9 +10,9 @@ import SnapKit
 
 final class LoadingCollectionViewCell: UICollectionViewCell {
     static let reuseId = "LoadingCell"
-    
+
     private let loader = UIActivityIndicatorView()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.addSubview(loader)
@@ -21,11 +21,11 @@ final class LoadingCollectionViewCell: UICollectionViewCell {
         }
         loader.startAnimating()
     }
-    
+
     override func prepareForReuse() {
         loader.startAnimating()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }

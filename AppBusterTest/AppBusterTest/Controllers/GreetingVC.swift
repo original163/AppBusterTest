@@ -8,7 +8,6 @@
 import UIKit
 import SnapKit
 
-
 final class GreetingVC: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -17,20 +16,20 @@ final class GreetingVC: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     private let backgroundImage: UIImageView = {
-        let image = UIImageView(image: UIImage(named: Constants.imageNames.greetingVCbackground.rawValue))
+        let image = UIImageView(image: UIImage(named: Constants.ImageNames.greetingVCbackground.rawValue))
         return image
     }()
     private let stackLogoWithLabel: UIStackView = {
-        let logo = UIImageView(image: UIImage(named: Constants.imageNames.greetingVClogo.rawValue))
+        let logo = UIImageView(image: UIImage(named: Constants.ImageNames.greetingVClogo.rawValue))
         logo.contentMode = .scaleAspectFit
         let label = UILabel()
-        label.text = Constants.text.infoLabelText.rawValue
+        label.text = Constants.Text.infoLabelText.rawValue
         label.backgroundColor = .init(white: 0, alpha: 0)
         label.textAlignment = .center
-        label.font = UIFont(name: Constants.fontNames.chalkboardSE.rawValue, size: 50)
-        
+        label.font = UIFont(name: Constants.FontNames.chalkboardSE.rawValue, size: 50)
+
         let stack = UIStackView(arrangedSubviews: [logo, label])
         stack.alignment = .center
         stack.axis = .vertical
@@ -38,7 +37,7 @@ final class GreetingVC: UIViewController {
         stack.autoresizesSubviews = true
         return stack
     }()
-    
+
     private let wrappViewForTextField: UIView = {
         let view = UIView()
         view.layer.borderColor = UIColor.darkGray.cgColor
@@ -50,17 +49,17 @@ final class GreetingVC: UIViewController {
     let userNameTextField: UITextField = {
         let textField = UITextField()
         textField.autocapitalizationType = .none
-        textField.font = UIFont(name: Constants.fontNames.chalkboardSE.rawValue, size: 27.0)
-        textField.placeholder = Constants.text.placholderText.rawValue
+        textField.font = UIFont(name: Constants.FontNames.chalkboardSE.rawValue, size: 27.0)
+        textField.placeholder = Constants.Text.placholderText.rawValue
         textField.textColor = .black
         textField.autocorrectionType = .no
         textField.returnKeyType = .search
         return textField
     }()
-    private let submitButton: UIButton = {
+    lazy private var submitButton: UIButton = {
         let button = UIButton(type: .system) as UIButton
         button.addTarget(self, action: #selector(buttonPressed), for: .touchUpInside)
-        button.setTitle(Constants.text.buttonText.rawValue, for: .normal)
+        button.setTitle(Constants.Text.buttonText.rawValue, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 30)
         button.backgroundColor = .darkText
         button.layer.cornerRadius = 15
@@ -68,16 +67,15 @@ final class GreetingVC: UIViewController {
         button.tintColor = .white
         return button
     }()
-    
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         userNameTextField.delegate = self
         setupUI()
     }
     @objc func buttonPressed(sender: UIButton!) {
-        
+
         userNameTextField.endEditing(true)
         if userNameTextField.text == "" {
             let alert = UIAlertController(title: "No input", message: "Please enter nickaname", preferredStyle: .alert)
@@ -90,14 +88,14 @@ final class GreetingVC: UIViewController {
             navigationController?.pushViewController(previewVC, animated: true)
         }
     }
-    
+
     func setupUI() {
         view.addSubview(backgroundImage)
         view.addSubview(stackLogoWithLabel)
         view.addSubview(wrappViewForTextField)
         view.addSubview(submitButton)
         wrappViewForTextField.addSubview(userNameTextField)
-        
+
         backgroundImage.snp.makeConstraints {
             $0.center.equalToSuperview()
             $0.size.equalToSuperview()
@@ -128,5 +126,3 @@ final class GreetingVC: UIViewController {
         print("GreatingVC deleted")
     }
 }
-
-

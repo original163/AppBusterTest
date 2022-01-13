@@ -22,18 +22,18 @@ class GistsProvider {
         case loading
         case finished
     }
-    
+
     private let api = GistAPI()
     private let username: String
     private var pageNumber: Int = Int()
     private var state: State = .idle
-    
+
     weak var delegate: GistsProviderDelegate?
-    
+
     init(username: String) {
         self.username = username
     }
-    
+
     func getNextGists() {
         switch state {
         case .idle:
@@ -43,10 +43,11 @@ class GistsProvider {
             break
         }
     }
-    
+
     private func request() {
         state = .loading
-        api.request(endpoint: .userGistsEndpoint(associatedValue: makeEndpointComponents())) { (result: Result<[Gist], APIError>) in
+        api.request(endpoint: .userGistsEndpoint(associatedValue:
+                                                    makeEndpointComponents())) { (result: Result<[Gist], APIError>) in
             DispatchQueue.main.async { [weak self] in
                 guard let self = self else { return }
                 switch result {
@@ -80,7 +81,7 @@ class GistsProvider {
             }
         }
     }
-    
+
     private func makeEndpointComponents() -> UserGistsEndpoint {
         UserGistsEndpoint(username: username, pageNumber: pageNumber)
     }

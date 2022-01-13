@@ -8,7 +8,7 @@
 import UIKit
 
 extension PreviewVC: GistsProviderDelegate {
-    
+
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReceiveNextPage gists: [Gist]) {
         self.gists += gists
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
@@ -25,11 +25,9 @@ extension PreviewVC: GistsProviderDelegate {
             alert.title = "Username doesn't exist"
             alert.message = "Type another one"
             present(alert, animated: true, completion: nil)
-            break
         case .systemError:
             alert.title = "Connection is lost..."
             present(alert, animated: true, completion: nil)
-            break
         case .serverError:
             alert.title = "Server error"
             present(alert, animated: true, completion: nil)
@@ -37,16 +35,17 @@ extension PreviewVC: GistsProviderDelegate {
             break
         }
     }
-  
     func gistProviderDelegate(_ gistProvider: GistsProvider, didReachFinalPage finished: Bool) {
         isFinished = true
         let alert = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         let action = UIAlertAction(title: "ok", style: .cancel)
         alert.addAction(action)
         alert.message = "User doesn't have gists"
-        present(alert, animated: true, completion: nil)
-        //        errorLabel.text = "User doesn't have gists"
-        //        errorLabel.isHidden = !gists.isEmpty
+
+        if gists.count == 0 {
+            present(alert, animated: true, completion: nil)
+        }
+
         DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
             if self.gists.isEmpty == false {
                 self.gistCollectionView.deleteItems(at: [IndexPath(row: self.gists.count, section: 0)])

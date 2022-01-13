@@ -6,21 +6,21 @@
 //
 
 enum Constants {
-    
-    enum imageNames: String {
-        
+
+    enum ImageNames: String {
+
         case back = "arrow.backward.circle"
         case greetingVCbackground = "greatingVCbackground"
         case previewVCbackground = "previewVCbackground"
         case greetingVClogo = "greetingVClogo"
     }
-    
-    enum fontNames: String {
+
+    enum FontNames: String {
         case chalkboardSE = "Chalkboard SE"
     }
-    
-    enum text: String {
-        
+
+    enum Text: String {
+
         case infoLabelText = "Gist browser"
         case emptyString = ""
         case placholderText = "Username"

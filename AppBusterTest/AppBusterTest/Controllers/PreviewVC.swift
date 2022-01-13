@@ -13,20 +13,20 @@ final class PreviewVC: UIViewController {
     var isFinished: Bool = false
     var imageState: ImageState = .notLoaded
     var gists: [Gist] = [Gist]()
-    
+
     enum ImageState {
         case notLoaded
         case loading
         case loaded
     }
-    
+
     private let backgroundImage: UIImageView = {
-        let image = UIImageView(image: UIImage(named: Constants.imageNames.previewVCbackground.rawValue ))
+        let image = UIImageView(image: UIImage(named: Constants.ImageNames.previewVCbackground.rawValue ))
         return image
     }()
     private let userAvatar: UIImageView = {
         let loader = UIActivityIndicatorView(style: .medium)
-        let image = UIImage(named: Constants.imageNames.greetingVClogo.rawValue)
+        let image = UIImage(named: Constants.ImageNames.greetingVClogo.rawValue)
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFill
         return imageView
@@ -35,11 +35,11 @@ final class PreviewVC: UIViewController {
         let stack = UIStackView()
         var userNickname = UILabel()
         userNickname.text = username
-        userNickname.font = UIFont(name: Constants.fontNames.chalkboardSE.rawValue, size: 30)
+        userNickname.font = UIFont(name: Constants.FontNames.chalkboardSE.rawValue, size: 30)
         stack.axis = .vertical
         stack.alignment = .center
         stack.distribution = .fillEqually
-        [userAvatar,userNickname,].forEach(stack.addArrangedSubview)
+        [userAvatar, userNickname ].forEach(stack.addArrangedSubview)
         return stack
     }()
     let gistCollectionView: UICollectionView = {
@@ -53,7 +53,7 @@ final class PreviewVC: UIViewController {
         collectionView.showsVerticalScrollIndicator = false
         return collectionView
     }()
-    
+
     init(username: String) {
         self.username = username
         gistProvider = GistsProvider(username: username)
@@ -65,18 +65,20 @@ final class PreviewVC: UIViewController {
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-       
+
         gistProvider.delegate = self
         gistProvider.getNextGists()
-        
-        gistCollectionView.register(GistCollectionViewCell.self, forCellWithReuseIdentifier: GistCollectionViewCell.reuseId)
-        gistCollectionView.register(LoadingCollectionViewCell.self, forCellWithReuseIdentifier: LoadingCollectionViewCell.reuseId)
+
+        gistCollectionView.register(GistCollectionViewCell.self,
+                                    forCellWithReuseIdentifier: GistCollectionViewCell.reuseId)
+        gistCollectionView.register(LoadingCollectionViewCell.self,
+                                    forCellWithReuseIdentifier: LoadingCollectionViewCell.reuseId)
         gistCollectionView.dataSource = self
         gistCollectionView.delegate = self
-        
+
         setupUI()
     }
-    
+
     func setupUI() {
         view.addSubview(backgroundImage)
         view.addSubview(gistCollectionView)
@@ -100,8 +102,7 @@ final class PreviewVC: UIViewController {
             $0.edges.equalToSuperview()
         }
     }
-    
-    
+
     func setImage(withURL url: URL) { // must be on отдельный класс API
         imageState = .loading
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
@@ -130,12 +131,8 @@ final class PreviewVC: UIViewController {
         }
         .resume()
     }
-    
+
     deinit {
         print("PreviewVC deleted")
     }
 }
-
-
-
-
